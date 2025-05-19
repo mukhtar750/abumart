@@ -1,0 +1,35 @@
+
+> dev
+> vite
+
+
+  VITE v6.3.5  ready in 180 ms
+
+  ➜  Local:   http://localhost:12001/
+  ➜  Network: http://10.2.68.74:12001/
+  ➜  press h + enter to show help
+
+  LARAVEL v11.43.2  plugin v1.2.0
+
+  ➜  APP_URL: https://work-1-ekfeiisdninjbbee.prod-runtime.all-hands.dev
+
+  #  Node.js[22213]: void node::ResetStdio() at ../src/node.cc:760
+  #  Assertion failed: !(err != 0) || (err == -1 && (*__errno_location ()) == 1)
+
+----- Native stack trace -----
+
+ 1: 0xf5c517 node::Assert(node::AssertionInfo const&) [node]
+ 2: 0xf061e4  [node]
+ 3: 0x7f5903d6d55d  [/lib/x86_64-linux-gnu/libc.so.6]
+ 4: 0x7f5903d6d69a  [/lib/x86_64-linux-gn 2: 0xf061e4  5: 0xe58b5f node::DefaultProcessExitHandlerInternal(node::Environment*, node::ExitCode) [node]
+ 6: 0xec46ff node::Environment::Exit(node::ExitCode) [node]
+ 7: 0x7f58fbe0f5e2 
+
+  #  Node.js[22213]: void node::Res 6: 0xec46ff node::Environment::Exit(node::ExitCode) [node]
+ 7: 0x7f26b5dcf5e2 
+
+  #  Node.js[21681]: void node::ResetStdio() at ../src/node.cc:76 1: 0xf5c517 node::Assert(node::AssertionInfo const&) [node]
+ 2: 0xf061e4  [node]
+ 3: 0xf06902 node::TrapWebAssemblyOrContinue(int, siginfo_t*, void*) [node]
+ 4: 0x7f5903d6b050  [/lib/x86_64-linux-gnu/libc.so.6]
+ode::TrapWebAssemblyOrC 4: 0x7f340d289050  [/lib/x86_64-linux- 4: 0x7f26bcb16050  [/lib/x86_64-linux-gnu/libc.so.6]

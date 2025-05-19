@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->string('payment_method')->nullable()->after('status');
-        });
+        // Check if the column already exists
+        if (!Schema::hasColumn('orders', 'payment_method')) {
+            Schema::table('orders', function (Blueprint $table) {
+                $table->string('payment_method')->nullable()->after('status');
+            });
+        }
     }
 
     /**
@@ -21,8 +24,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('payment_method');
-        });
+        // Only drop if the column exists
+        if (Schema::hasColumn('orders', 'payment_method')) {
+            Schema::table('orders', function (Blueprint $table) {
+                $table->dropColumn('payment_method');
+            });
+        }
     }
 };

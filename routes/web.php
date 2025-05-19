@@ -83,14 +83,14 @@ Route::get('/purchase', [PurchaseController::class, 'index'])->name('purchase.in
 
 // Authentication routes (for regular users)
 Route::middleware('guest')->group(function () {
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])
-        ->name('login');
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    Route::get('user-login', [AuthenticatedSessionController::class, 'create'])
+        ->name('user.login');
+    Route::post('user-login', [AuthenticatedSessionController::class, 'store']);
 });
 
 Route::middleware('auth')->group(function () {
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-        ->name('logout');
+    Route::post('user-logout', [AuthenticatedSessionController::class, 'destroy'])
+        ->name('user.logout');
 });
 
 // Admin Routes
@@ -142,4 +142,7 @@ Route::get('/test-shop', function () {
 Route::get('/contact', [ContactController::class, 'show'])->name('contact');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
-require __DIR__ . '/auth.php';
+// Use a prefix for the default auth routes to avoid conflicts with Fortify
+Route::prefix('auth')->group(function () {
+    require __DIR__ . '/auth.php';
+});

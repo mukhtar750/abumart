@@ -4,14 +4,29 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{{ config('app.name', 'AbuMart') }}</title>
+        
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
+        
+        <!-- Custom CSS -->
         <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+        
+        <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        
+        <!-- Google Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        
+        <!-- Vite Assets -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         
         <!-- Pusher -->
         <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+        
+        <!-- Stack for additional styles -->
+        @stack('styles')
     </head>
     <body>
         <!-- Navigation -->
@@ -23,32 +38,36 @@
                 </div>
                 <ul class="nav-links">
                     <li><a href="{{ route('home') }}">Home</a></li>
-                    <li><a href="{{ route('shop.index') }}">Shop</a></li>
-                    <li><a href="{{ route('about') }}">About</a></li>
+                    <li><a href="#about">About</a></li>
                     <li><a href="{{ route('contact') }}">Contact</a></li>
-                    @auth
+                    @if (Auth::check())
                         <li><a href="{{ route('customer.dashboard') }}">Dashboard</a></li>
                         <li><a href="{{ route('orders.index') }}">Orders</a></li>
-                        <li>
-                            <a href="{{ route('notifications.index') }}" class="relative">
-                                <span>Notifications</span>
-                                <span id="notification-count" class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full h-4 w-4 flex items-center justify-center text-xs{{ \App\Models\Notification::where('user_id', auth()->id())->where('is_read', false)->count() === 0 ? ' hidden' : '' }}">
-                                    {{ \App\Models\Notification::where('user_id', auth()->id())->where('is_read', false)->count() }}
-                                </span>
-                            </a>
-                        </li>
+                        <li><a href="{{ route('shop.index') }}">Shop</a></li>
                         <li><a href="{{ route('cart') }}">Cart</a></li>
                         <li>
-                            <form method="POST" action="{{ route('logout') }}" class="inline">
-                                @csrf
-                                <button type="submit" class="nav-link">Logout</button>
-                            </form>
+                            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fa fa-sign-out-alt me-2"></i> Logout
+                            </a>
                         </li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
                     @else
                         <li><a href="{{ route('login') }}">Login</a></li>
                         <li><a href="{{ route('register') }}">Register</a></li>
-                    @endauth
+                    @endif
                 </ul>
+                <div class="cart-icon" id="cartIcon">
+                    <a href="{{ route('cart') }}" class="relative inline-block">
+                        <i class="fas fa-shopping-cart text-white"></i>
+                        @if(session()->has('cart') && count(session('cart')) > 0)
+                            <span class="cart-count absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                                {{ count(session('cart')) }}
+                            </span>
+                        @endif
+                    </a>
+                </div>
             </div>
         </nav>
 
@@ -68,51 +87,44 @@
                         </div>
                         <p class="footer-tagline">Your Premier Destination for Fashion, Watches & Footwear</p>
                         <div class="social-icons">
-                            <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
-                            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="social-icon"><i class="fab fa-pinterest"></i></a>
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-pinterest-p"></i></a>
                         </div>
                     </div>
-                    <div class="footer-section">
+                    <div class="footer-section links-section">
                         <h3>Quick Links</h3>
-                        <ul class="footer-links">
+                        <ul>
                             <li><a href="{{ route('home') }}">Home</a></li>
                             <li><a href="{{ route('shop.index') }}">Shop</a></li>
-                            <li><a href="{{ route('about') }}">About Us</a></li>
+                            <li><a href="#about">About Us</a></li>
                             <li><a href="{{ route('contact') }}">Contact</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms & Conditions</a></li>
                         </ul>
                     </div>
-                    <div class="footer-section">
-                        <h3>Categories</h3>
-                        <ul class="footer-links">
-                            <li><a href="{{ route('shop.index', ['category' => 1]) }}">Clothing</a></li>
-                            <li><a href="{{ route('shop.index', ['category' => 2]) }}">Watches</a></li>
-                            <li><a href="{{ route('shop.index', ['category' => 3]) }}">Shoes</a></li>
-                            <li><a href="{{ route('shop.index', ['category' => 4]) }}">Accessories</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-section">
+                    <div class="footer-section contact-section">
                         <h3>Contact Us</h3>
-                        <ul class="footer-contact">
-                            <li><i class="fas fa-phone"></i> +234 90 7796 7626</li>
-                            <li><i class="fas fa-envelope"></i> info@abumart.com</li>
-                            <li><i class="fas fa-map-marker-alt"></i> 17 Olumbe Bassir, New Bodija Estate, Ibadan</li>
-                        </ul>
+                        <p><i class="fas fa-map-marker-alt"></i> 123 Fashion Street, Lagos, Nigeria</p>
+                        <p><i class="fas fa-phone-alt"></i> +234 123 456 7890</p>
+                        <p><i class="fas fa-envelope"></i> info@abumart.com</p>
+                        <p><i class="fas fa-clock"></i> Mon-Fri: 9am - 6pm</p>
                     </div>
                 </div>
                 <div class="footer-bottom">
-                    <p>&copy; 2025 AbuMart. All rights reserved.</p>
-                    <div class="footer-bottom-links">
-                        <a href="#">Privacy Policy</a>
-                        <a href="#">Terms of Service</a>
-                    </div>
+                    <p>&copy; {{ date('Y') }} AbuMart. All Rights Reserved.</p>
                 </div>
             </div>
         </footer>
 
+        <!-- Custom Scripts -->
         <script src="{{ asset('js/script.js') }}"></script>
-        
+
+        <!-- Bootstrap JS Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
         <!-- Pusher Configuration and Notifications -->
         <script>
             const PUSHER_APP_KEY = '{{ env("PUSHER_APP_KEY") }}';
@@ -121,5 +133,8 @@
             const USER_ROLE = '{{ auth()->user() && auth()->guard("admin")->check() ? "admin" : "customer" }}';
         </script>
         <script src="{{ asset('js/notifications.js') }}"></script>
+        
+        <!-- Stack for additional scripts -->
+        @stack('scripts')
     </body>
 </html>

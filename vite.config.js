@@ -8,4 +8,15 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        host: '0.0.0.0',
+        port: 12001,
+        strictPort: true,
+        hmr: {
+            host: 'work-2-ekfeiisdninjbbee.prod-runtime.all-hands.dev',
+        },
+        watch: {
+            usePolling: true,
+        },
+    },
 });
