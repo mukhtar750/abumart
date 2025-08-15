@@ -17,7 +17,19 @@ RUN apt-get update && apt-get install -y \
     supervisor \
     nodejs \
     npm \
-    && docker-php-ext-install pdo pdo_mysql pdo_sqlite mbstring exif pcntl bcmath gd zip intl
+    && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions one by one to identify any issues
+RUN docker-php-ext-install pdo
+RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-install pdo_sqlite
+RUN docker-php-ext-install mbstring
+RUN docker-php-ext-install exif
+RUN docker-php-ext-install pcntl
+RUN docker-php-ext-install bcmath
+RUN docker-php-ext-install gd
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install intl
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
