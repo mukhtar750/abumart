@@ -1,27 +1,23 @@
-# Use PHP 8.2 FPM Alpine as base image
-FROM php:8.2-fpm-alpine
+FROM php:8.2-fpm
 
 # Install system dependencies
-RUN apk add --no-cache \
-    nginx \
-    supervisor \
-    git \
-    curl \
+RUN apt-get update && apt-get install -y \
+    build-essential \
     libpng-dev \
+    libjpeg-dev \
+    libonig-dev \
     libxml2-dev \
+    libzip-dev \
     zip \
     unzip \
+    curl \
+    git \
+    nano \
+    nginx \
+    supervisor \
     nodejs \
-    npm
-
-# Install PHP extensions
-RUN docker-php-ext-install \
-    pdo_mysql \
-    pdo_sqlite \
-    bcmath \
-    gd \
-    xml \
-    zip
+    npm \
+    && docker-php-ext-install pdo pdo_mysql pdo_sqlite mbstring exif pcntl bcmath gd zip intl
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

@@ -58,3 +58,7 @@ README.md
 public/build
 public/hot
 public/storage
+
+# Database files (will be created in container)
+database/*.sqlite*
+database/*.db

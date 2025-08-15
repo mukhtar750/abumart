@@ -10,6 +10,14 @@ mkdir -p /var/log/supervisor
 mkdir -p /var/log/nginx
 mkdir -p /var/log/php-fpm
 
+# Create SQLite database if it doesn't exist
+if [ "$DB_CONNECTION" = "sqlite" ]; then
+    echo "Setting up SQLite database..."
+    touch /var/www/html/database/database.sqlite
+    chmod 664 /var/www/html/database/database.sqlite
+    chown www-data:www-data /var/www/html/database/database.sqlite
+fi
+
 # Set proper permissions
 chown -R www-data:www-data /var/www/html
 chmod -R 755 /var/www/html/storage
