@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     libzip-dev \
     libsqlite3-dev \
+    libicu-dev \
     zip \
     unzip \
     curl \
