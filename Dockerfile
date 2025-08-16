@@ -39,20 +39,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy composer files
-COPY composer.json composer.lock ./
+# Copy application files first
+COPY . .
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Copy package files
-COPY package.json package-lock.json ./
-
 # Install Node.js dependencies
 RUN npm ci --only=production
-
-# Copy application files
-COPY . .
 
 # Build frontend assets
 RUN npm run build
