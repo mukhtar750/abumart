@@ -86,6 +86,11 @@ Route::middleware('guest')->group(function () {
     Route::get('user-login', [AuthenticatedSessionController::class, 'create'])
         ->name('user.login');
     Route::post('user-login', [AuthenticatedSessionController::class, 'store']);
+    
+    // Add alias for compatibility
+    Route::get('login', [AuthenticatedSessionController::class, 'create'])
+        ->name('login');
+    Route::post('login', [AuthenticatedSessionController::class, 'store']);
 });
 
 Route::middleware('auth')->group(function () {
