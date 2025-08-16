@@ -146,3 +146,12 @@ Route::post('/contact', [ContactController::class, 'send'])->name('contact.send'
 Route::prefix('auth')->group(function () {
     require __DIR__ . '/auth.php';
 });
+
+// Redirect Fortify routes to custom login to prevent conflicts
+Route::get('/fortify/login', function () {
+    return redirect()->route('user.login');
+})->name('fortify.login.redirect');
+
+Route::post('/fortify/login', function () {
+    return redirect()->route('user.login');
+})->name('fortify.login.post.redirect');
