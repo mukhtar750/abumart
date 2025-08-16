@@ -29,6 +29,16 @@ if [ ! -f /var/www/html/.env ]; then
     cp /var/www/html/setup.env.example /var/www/html/.env
 fi
 
+# Explicitly set database connection to SQLite to override any defaults
+export DB_CONNECTION=sqlite
+export DB_DATABASE=/var/www/html/database/database.sqlite
+export SESSION_CONNECTION=sqlite
+export CACHE_STORE=database
+export QUEUE_CONNECTION=database
+
+echo "Database connection set to: $DB_CONNECTION"
+echo "Database path: $DB_DATABASE"
+
 # Generate application key
 cd /var/www/html
 php artisan key:generate --force || echo "Key already generated"
