@@ -45,11 +45,14 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Install Node.js dependencies
-RUN npm ci --only=production
+# Install Node.js dependencies (including devDependencies for building)
+RUN npm ci
 
 # Build frontend assets
 RUN npm run build
+
+# Remove devDependencies to keep production image clean
+RUN npm prune --production
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \
