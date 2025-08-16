@@ -33,16 +33,14 @@ fi
 cd /var/www/html
 php artisan key:generate --force || echo "Key already generated"
 
-# Clear and cache config
+# Force clear ALL caches to ensure environment variables are loaded
+echo "Clearing all Laravel caches..."
 php artisan config:clear
-php artisan config:cache
-
-# Clear and cache routes
+php artisan cache:clear
 php artisan route:clear
-php artisan route:cache
-
-# Clear and cache views
 php artisan view:clear
+php artisan config:cache
+php artisan route:cache
 php artisan view:cache
 
 # Run migrations if database is available
