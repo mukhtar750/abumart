@@ -43,18 +43,22 @@ echo "Database path: $DB_DATABASE"
 cd /var/www/html
 php artisan key:generate --force || echo "Key already generated"
 
-# Force clear ALL caches to ensure environment variables are loaded
+# Run migrations FIRST to create database tables
+echo "Creating database tables..."
+php artisan migrate --force || echo "Migrations completed"
+
+# Now clear caches AFTER tables exist
 echo "Clearing all Laravel caches..."
 php artisan config:clear
-php artisan cache:clear
+php artisan cache:clear || echo "Cache clear completed"
 php artisan route:clear
 php artisan view:clear
+
+# Cache configurations AFTER clearing
+echo "Caching configurations..."
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
-
-# Run migrations if database is available
-php artisan migrate --force || echo "Migrations failed or not needed"
 
 # Optimize for production
 php artisan optimize
